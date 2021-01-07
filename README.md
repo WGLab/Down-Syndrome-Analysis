@@ -1,0 +1,1 @@
+`get_NER.ipynb`: Build an instance of QuickUMLS and process the Down Syndrome Notes preprocessed 2 years ago. 

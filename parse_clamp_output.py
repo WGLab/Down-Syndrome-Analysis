@@ -1,11 +1,17 @@
 import os, argparse
-
+import sys
 parser = argparse.ArgumentParser(description='Parse CLAMP output.')
 parser.add_argument('-f', '--folder')
 parser.add_argument('-c', '--cui_output')
 parser.add_argument('-n', '--noncui_output')
+parser.add_argument('-l', '--long_notes', action='store_true')
+parser.add_argument('-nf', '--note_folder')
 args = parser.parse_args()
 
+if(args.long_notes):
+    if(args.note_folder == None):
+        sys.exit('No input for the note folder. It needs the folder to check if a note is long note!S')
+    
 
 # In the outputs, if one line startswith 'NamedEntity', this line shows the NER info
 NER = 'NamedEntity'
@@ -18,6 +24,9 @@ ne_no_cui = dict()
 
 
 for n in os.listdir('{}'.format(args.folder)):
+    
+    if(args.long_notes):
+        if(os.stat('{}/{}'.format(args.note_folder, n)).st_size < 2000): continue
 
     for line in open(r'{}/{}'.format(args.folder, n)):
         if(not line.startswith(NER)): continue

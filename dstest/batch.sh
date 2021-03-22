@@ -1,9 +1,10 @@
 ### SETUP ###
 
 set -x
-mkdir -p metamap/downmeta metamap/metaterms metamap/metahpo
-mkdir -p clamp/downclamp clamp/clampterms clamp/clamplog clamp/clamphpo
-mkdir -p ctakes/downctakes ctakes/ctakesterms ctakes/ctakeshpo
+mkdir -p metamap/downmeta metamap/metaterms metamap/metahpo metamap/out
+mkdir -p clamp/downclamp clamp/clampterms clamp/clamplog clamp/clamphpo clamp/out
+mkdir -p ctakes/downctakes ctakes/ctakesterms ctakes/ctakeshpo ctakes/out
+mkdir -p txt2hpo/t2hterms txt2hpo/out
 
 CDIR=/mnt/isilon/wang_lab/jim/Down-Syndrome-Clustering
 
@@ -76,6 +77,10 @@ done
 ### txt2hpo ###
 
 # running txt2hpo
+for FILE in $CDIR/28-pts-notes-20180821-rechecked-wkc/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/runt2h.py $FILE $CDIR/txt2hpo/t2hterms/$FILEN
+done
 
 #### running phen2gene ####
 # install p2g locally first! setup.sh in repo makes it easy 
@@ -91,6 +96,11 @@ for FILE in $CDIR/ctakes/ctakeshpo/*; do
     FILEN=$(echo "$FILE" | sed "s/.*\///")
     phen2gene.py -f $FILE -out $CDIR/ctakes/out -n $FILEN
 done
+for FILE in $CDIR/txt2hpo/t2hterms/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    phen2gene.py -f $FILE -out $CDIR/txt2hpo/out -n $FILEN
+done
 
 #### comparison between tools ####
-
+# copy probe_info from Phen2Gene/testing_data
+python dstest/ranktools.py -t $CDIR/txt2hpo/out -k $CDIR/ctakes/out -c $CDIR/clamp/out -m $CDIR/metamap/out

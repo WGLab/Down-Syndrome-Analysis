@@ -72,6 +72,25 @@ for FILE in $CDIR/ctakes/ctakesterms/*; do
     python $CDIR/dstest/hpoterms.py $FILE $CDIR/ctakes/ctakeshpo/$FILEN
 done
 
+
 ### txt2hpo ###
 
 # running txt2hpo
+
+#### running phen2gene ####
+# install p2g locally first! setup.sh in repo makes it easy 
+for FILE in $CDIR/metamap/metahpo/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    phen2gene.py -f $FILE -out $CDIR/metamap/out -n $FILEN
+done
+for FILE in $CDIR/clamp/clamphpo/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    phen2gene.py -f $FILE -out $CDIR/clamp/out -n $FILEN
+done
+for FILE in $CDIR/ctakes/ctakeshpo/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    phen2gene.py -f $FILE -out $CDIR/ctakes/out -n $FILEN
+done
+
+#### comparison between tools ####
+

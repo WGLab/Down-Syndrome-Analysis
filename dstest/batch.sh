@@ -4,6 +4,7 @@ set -x
 mkdir -p metamap/downmeta metamap/metaterms metamap/metahpo
 mkdir -p clamp/downclamp clamp/clampterms clamp/clamplog clamp/clamphpo
 mkdir -p ctakes/downctakes ctakes/ctakesterms ctakes/ctakeshpo
+
 CDIR=/mnt/isilon/wang_lab/jim/Down-Syndrome-Clustering
 
 ### METAMAP ### 
@@ -19,13 +20,13 @@ done
 
 # metamap (instructions at https://metamap.nlm.nih.gov/Docs/MM_2016_Usage.pdf)
 for FILE in $CDIR/28-pts-notes-20180821-rechecked-wkc/*; do
-    FILE=$(echo "$FILE" | sed "s/.*\///")
-    metamap -y -R HPO -V USAbase --JSONf 2 $CDIR/28-pts-notes-20180821-rechecked-wkc/$FILE $CDIR/metamap/downmeta/$FILE
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    metamap -y -R HPO -V USAbase --JSONf 2 $FILE $CDIR/metamap/downmeta/$FILEN
 done
 
 for FILE in $CDIR/metamap/downmeta/*; do
-    FILE=$(echo "$FILE" | sed "s/.*\///")
-    python $CDIR/dstest/parsemeta.py $CDIR/metamap/downmeta/$FILE $CDIR/metamap/metaterms/$FILE
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/parsemeta.py $FILE $CDIR/metamap/metaterms/$FILE
 done
 
 ### CLAMP ###
@@ -37,8 +38,8 @@ rm $CDIR/clamp/downclamp/*xmi
 # formatting clamp output
 # https://clamp.uth.edu/res/CLAMP_v1.1.3_README.pdf is useful for interpretation
 for FILE in $CDIR/clamp/downclamp/*; do
-    FILE=$(echo "$FILE" | sed "s/.*\///")
-    python $CDIR/dstest/parseclamp.py $CDIR/clamp/downclamp/$FILE $CDIR/clamp/clampterms/$FILE
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/parseclamp.py $FILE $CDIR/clamp/clampterms/$FILEN
 done
 
 ### cTakes ###
@@ -53,11 +54,23 @@ bash /mnt/isilon/wang_lab/jim/apache-ctakes-4.0.0.1/bin/runClinicalPipeline.sh -
 
 # formatting ctakes output
 for FILE in $CDIR/ctakes/downctakes/*; do
-    FILE=$(echo "$FILE" | sed "s/.*\///")
-    python $CDIR/dstest/parsectakes.py $CDIR/ctakes/downctakes/$FILE $CDIR/ctakes/ctakesterms/$FILE
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/parsectakes.py $FILE $CDIR/ctakes/ctakesterms/$FILEN
 done
 
-### extracting hpo terms for clamp, metamap, ctakes ###
+### extracting hpo terms for metamap, clamp, ctakes ###
+for FILE in $CDIR/metamap/metaterms/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/hpoterms.py $FILE $CDIR/metamap/metahpo/$FILEN
+done
+for FILE in $CDIR/clamp/clampterms/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/hpoterms.py $FILE $CDIR/clamp/clamphpo/$FILEN
+done
+for FILE in $CDIR/ctakes/ctakesterms/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    python $CDIR/dstest/hpoterms.py $FILE $CDIR/ctakes/ctakeshpo/$FILEN
+done
 
 ### txt2hpo ###
 

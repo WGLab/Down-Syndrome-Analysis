@@ -27,7 +27,7 @@ done
 
 for FILE in $CDIR/metamap/downmeta/*; do
     FILEN=$(echo "$FILE" | sed "s/.*\///")
-    python $CDIR/dstest/parsemeta.py $FILE $CDIR/metamap/metaterms/$FILE
+    python $CDIR/dstest/parsemeta.py $FILE $CDIR/metamap/metaterms/$FILEN
 done
 
 ### CLAMP ###
@@ -100,7 +100,11 @@ for FILE in $CDIR/txt2hpo/t2hterms/*; do
     FILEN=$(echo "$FILE" | sed "s/.*\///")
     phen2gene.py -f $FILE -out $CDIR/txt2hpo/out -n $FILEN
 done
+for FILE in $CDIR/expert/experthpo/*; do
+    FILEN=$(echo "$FILE" | sed "s/.*\///")
+    phen2gene.py -f $FILE -out $CDIR/expert/out -n $FILEN
+done
 
 #### comparison between tools ####
-# copy probe_info from Phen2Gene/testing_data
-python dstest/ranktools.py -t $CDIR/txt2hpo/out -k $CDIR/ctakes/out -c $CDIR/clamp/out -m $CDIR/metamap/out
+# custom probe_info made from Phen2Gene/testing_data, and makes plot for accuracy in figures/phen2geneCUaccuracy.png
+python dstest/ranktools.py -t $CDIR/txt2hpo/out -k $CDIR/ctakes/out -c $CDIR/clamp/out -m $CDIR/metamap/out -e $CDIR/expert/out -p $CDIR/probe_info

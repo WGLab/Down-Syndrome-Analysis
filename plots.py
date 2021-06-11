@@ -81,10 +81,12 @@ rcParams.update({'figure.autolayout': True})
 
 plt.savefig(args.output[0]+'.png', bbox_inches='tight')
 plt.close()
+odds.to_csv(args.output[0]+'.tsv', sep='\t')
 fig, ax = plt.subplots()
 # fig, ax = plt.subplots(3,2)
-term = 'Receptive language delay'
-ax.hist(agedict[term], bins, histtype='stepfilled')
+term = 'Ventricular septal defect'
+# ax.hist(agedict[term], bins, histtype='stepfilled')
+sns.histplot(agedict[term], bins=bins)
 ticks=sorted(set(agedict[term]))
 ax.set_xticks(ticks)
 ax.set_xticklabels(map("{:.0f}".format, ticks))

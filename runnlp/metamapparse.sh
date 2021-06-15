@@ -3,7 +3,7 @@ NOTEDIR=$1
 FILE=$2
 DSDIR=$3
 NAME=$4
-#FILEN=$(echo "$FILE" | sed "s/.*\///")
+FILEN=$(echo "$FILE" | sed "s/.*\///")
 DIR=$(echo "$FILE" | sed 's:/[^/]*$::')
 mkdir -p $DSDIR/"$NAME"notes_ascii/$DIR
 mkdir -p $DSDIR/"$NAME"data/raw/$DIR
@@ -23,7 +23,7 @@ chmod -R 774 $DSDIR/"$NAME"data/hpo/$DIR
 #chmod -R 774 $DSDIR/dsdata/hpo/$DIR
 #cat /etc/hostname >&2
 cd $NOTEDIR
-java -jar /mnt/isilon/wang_lab/jim/replace_utf8.jar $FILE > $DSDIR/"$NAME"notes_ascii/$FILE
-metamap -y -@ reslnvvhpc062.research.chop.edu -S reslnvvhpc062.research.chop.edu -R HPO -V USAbase --JSONf 2 $DSDIR/"$NAME"notes_ascii/$FILE $DSDIR/"$NAME"data/raw/$FILE
-python $DSDIR/runnlp/metarepeat.py $DSDIR/"$NAME"data/raw/$FILE $DSDIR/"$NAME"data/terms/$FILE
-python $DSDIR/runnlp/hporepeat.py $DSDIR/"$NAME"data/terms/$FILE $DSDIR/"$NAME"data/hpo/$FILE $DSDIR/umlshpo.json
+java -jar /mnt/isilon/wang_lab/jim/replace_utf8.jar $FILE > $DSDIR/"$NAME"notes_ascii/$DIR/$FILEN
+metamap -y -@ reslnvvhpc062.research.chop.edu -S reslnvvhpc062.research.chop.edu -R HPO -V USAbase --JSONf 2 $DSDIR/"$NAME"notes_ascii/$DIR/$FILEN $DSDIR/"$NAME"data/raw/$DIR/$FILEN
+python $DSDIR/runnlp/metarepeat.py $DSDIR/"$NAME"data/raw/$DIR/$FILEN $DSDIR/"$NAME"data/terms/$DIR/$FILEN
+python $DSDIR/runnlp/hporepeat.py $DSDIR/"$NAME"data/terms/$DIR/$FILEN $DSDIR/"$NAME"data/hpo/$DIR/$FILEN $DSDIR/umlshpo.json

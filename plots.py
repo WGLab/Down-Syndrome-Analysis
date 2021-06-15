@@ -71,6 +71,7 @@ odds.sort_values(axis=0, inplace=True, ascending=False)
                 # controlset.add(fields[0]) # index, HPO term name
     # df = df.loc[df.index.difference(controlset)]
 
+# odds ratio of terms plot
 fig, ax = plt.subplots()
 sns.set_style('ticks')
 sns.despine(right=True,top=True)
@@ -78,29 +79,44 @@ odds.head(20).plot(kind='bar')
 ax.set_ylabel('Odds Ratio, Patient Frequency')
 from matplotlib import rcParams
 rcParams.update({'figure.autolayout': True})
-
 plt.savefig(args.output[0]+'.png', bbox_inches='tight')
 plt.close()
+
+# individual term age plots
 odds.to_csv(args.output[0]+'.tsv', sep='\t')
 fig, ax = plt.subplots()
 # fig, ax = plt.subplots(3,2)
-term = 'Ventricular septal defect'
+term = 'Abnormal ear physiology'
 # ax.hist(agedict[term], bins, histtype='stepfilled')
 sns.histplot(agedict[term], bins=bins)
+# use top 100 odds ratio terms, plot age dists, heatmap line by line
 ticks=sorted(set(agedict[term]))
 ax.set_xticks(ticks)
 ax.set_xticklabels(map("{:.0f}".format, ticks))
 ax.set_xlim(0,max(ticks))
 for i, t in enumerate(ax.get_xticklabels()):
-    if (i % 4) != 0:
+    if (i % 16) != 0:
         t.set_visible(False)
 plt.xlabel('Age')
 plt.ylabel('Count of Visits')
 plt.title(term)
 print(ticks)
+
+topkeys = odds.head(100).index
+topage = { key: agedict[key] for key in topkeys }
+
 # ax[0, 0].plot(agedict['Zonular cataract'])
 sns.set_style('ticks')
 sns.despine(right=True,top=True)
 # for a in ax.flat:
     # a.set(xlabel='Age', ylabel='Count of Visits')
 plt.savefig(args.output[1]+'.png', bbox_inches='tight')
+plt.close()
+# heatmap of top 100 HPO terms by age
+f, ax = plt.subplots(figsize=(15, 10))
+# df = pd.DataFrame.from_dict(agedict,orient='index').transpose()
+df = pd.concat({k: pd.Series(v).value_counts() for k, v in topage.items()}, axis=1).transpose()
+print(df)
+ax = sns.heatmap(df, mask=df.isnull(), cmap="rocket_r", yticklabels=True)#, xticklabels=True)
+plt.savefig(args.output[1]+'top100.png', bbox_inches='tight')
+plt.close()

@@ -79,7 +79,9 @@ def patient_calculation(directory, agedict, term_ages):
             with open(file, "r") as f:
                 hpos = []
                 for line in f:
-                    hpos.append(line.strip())
+                    hp = line.strip()
+                    hpos.append(hp)
+                    hpos.extend(networkx.descendants(graph, hp))
                 filecounts += Counter(hpos)
                 doccounts += Counter({key:1 for key in Counter(hpos).keys()})
                 for hp in set(hpos):

@@ -12,13 +12,14 @@ START=$1
 END=$2
 NOTEDIR=$3
 NAME=$4
-STOP=$(bc <<< "$END+1")
+#STOP=$(bc <<< "$END+1")
 
 DSDIR=/mnt/isilon/wang_lab/jim/Down-Syndrome-Clustering
 #for FILE in $DSDIR/28-pts-notes-20180821-rechecked-wkc/*; do
 cd $NOTEDIR
 
 for i in $(seq $START 1 $END); do
+    #FILE=$(sed -n "$i"p $DSDIR/dspaths)
     FILE=$(sed -n "$i"p $DSDIR/notepaths)
     #FILE=$(sed -n "$SLURM_ARRAY_TASK_ID"p <(sed -n ''"$START"','"$END"'p;'"$STOP"'q' $DSDIR/notepaths))
     #FILE=$(sed -n "$SLURM_ARRAY_TASK_ID"p <(sed -n '10000,10100p;10101q' $DSDIR/notepaths))

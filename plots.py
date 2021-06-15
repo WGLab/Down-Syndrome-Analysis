@@ -44,9 +44,10 @@ def age_parse(agefile, id_to_name, bins):
 bins = np.arange(0, 120, .25)
 agedict = age_parse(args.ages, id_to_name, bins)
 caseterms = pd.read_csv(args.termdata[0], sep='\t', header=0, index_col=0)
+top100 = caseterms.head(100).index
 controlterms = pd.read_csv(args.termdata[1], sep='\t', header=0, index_col=0)
-# 4209 DS patients, 7845 control patients (or could get patient inputs from -n if you want)
-case_n = 4209
+# 4209 - 115(22q) = 4094 DS patients, 7845 control patients (or could get patient inputs from -n if you want)
+case_n = 4094
 control_n = 7845
 if args.numbers:
     case_n = int(args.numbers[0])
@@ -103,7 +104,7 @@ plt.title(term)
 print(ticks)
 
 topkeys = odds.head(100).index
-topage = { key: agedict[key] for key in topkeys }
+topage = { key: agedict[key] for key in top100 }
 
 # ax[0, 0].plot(agedict['Zonular cataract'])
 sns.set_style('ticks')
@@ -113,10 +114,13 @@ sns.despine(right=True,top=True)
 plt.savefig(args.output[1]+'.png', bbox_inches='tight')
 plt.close()
 # heatmap of top 100 HPO terms by age
-f, ax = plt.subplots(figsize=(15, 10))
+f, ax = plt.subplots(figsize=(15, 15))
 # df = pd.DataFrame.from_dict(agedict,orient='index').transpose()
 df = pd.concat({k: pd.Series(v).value_counts() for k, v in topage.items()}, axis=1).transpose()
 print(df)
-ax = sns.heatmap(df, mask=df.isnull(), cmap="rocket_r", yticklabels=True)#, xticklabels=True)
+ax = sns.heatmap(df, mask=df.isnull(), cmap="icefire", yticklabels=True, cbar_kws={'label': 'Number of Visits'})#, xticklabels=True)
+ax.set_ylabel("HPO terms", fontsize=16)
+ax.set_xlabel("Age in Years", fontsize=16)
+ax.figure.axes[-1].yaxis.label.set_size(16)
 plt.savefig(args.output[1]+'top100.png', bbox_inches='tight')
 plt.close()

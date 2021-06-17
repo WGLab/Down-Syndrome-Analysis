@@ -56,10 +56,10 @@ def accplot(dicts, labels, filename):
     #matplotlib.rcParams['font.sans-serif'] = ['Arial']
     matplotlib.rcParams['font.size'] = 11
 
-    fig, ax = plt.subplots(1)
+    fig, ax = plt.subplots(figsize=(15,5))
 
-    width=0.4
-    distance = 3
+    width=0.6
+    distance = 4
     ct = 0
     colors = [(161/255.0,218/255.0,215/255.0),(56/255.0,138/255.0,172/255.0),(95/255.0,158/255.0,160/255.0),(135/255.0,206/255.0,250/255.0),(105/255.0,222/255.0,250/255.0)]
     edgecolor=(96/255.0, 133/255.0, 131/255.0)
@@ -75,7 +75,7 @@ def accplot(dicts, labels, filename):
         autolabel(rects, ax, xoffset=-0.2)
 
 
-    ax.set_xticks(lefts-width*.45)
+    ax.set_xticks(lefts-width*2)
     ax.set_xticklabels(ranks)
 
     ax.legend(loc='upper left', ncol=1,bbox_to_anchor=(0, 1.1))

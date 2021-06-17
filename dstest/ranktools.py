@@ -26,7 +26,7 @@ with open(args.probe, "r") as f:
 ds=[args.ctakes,args.clamp,args.txt2hpo,args.metamap,args.expert]
 names=['cTakes', 'CLAMP', 'txt2hpo', 'MetaMap', 'Expert']
 dictinit=OrderedDict({name:0.0 for name in names})
-values = defaultdict(lambda: OrderedDict({"top10": 0.0, "top50": 0.0, "top100": 0.0, "top1000": 0.0}))
+values = defaultdict(lambda: OrderedDict({"Top 10": 0.0, "Top 50": 0.0, "Top 100": 0.0, "Top 1000": 0.0}))
 top10, top50, top100, top250 = dictinit.copy(), dictinit.copy(), dictinit.copy(), dictinit.copy()
 for d, name in zip(ds, names):
     filelist = [os.path.join(d, path) for path in sorted(os.listdir(d))] # sort by number, may not be right order based on results though
@@ -48,28 +48,28 @@ for d, name in zip(ds, names):
                     rank = int(fields[0])
                     # print (patient, name, gene, rank)
                     if rank <= 10:
-                        # top10[name] +=1
-                        values[name]["top10"] +=1
+                        # Top 10[name] +=1
+                        values[name]["Top 10"] +=1
                     if rank <= 50:
-                        # top50[name] +=1
-                        values[name]["top50"] +=1
+                        # Top 50[name] +=1
+                        values[name]["Top 50"] +=1
                     if rank <= 100:
-                        # top100[name] +=1
-                        values[name]["top100"] +=1
+                        # Top 100[name] +=1
+                        values[name]["Top 100"] +=1
                     if rank <= 1000:
-                        # top1000[name] +=1
-                        values[name]["top1000"] +=1
-    values[name]["top10"] = values[name]["top10"]*100/count
-    values[name]["top50"] = values[name]["top50"]*100/count
-    values[name]["top100"] = values[name]["top100"]*100/count
-    values[name]["top1000"] = values[name]["top1000"]*100/count
-    # top10[name] = top10[name]*100/count
-    # top50[name] = top50[name]*100/count
-    # top100[name] = top100[name]*100/count
-    # top1000[name] = top1000[name]*100/count
+                        # Top 1000[name] +=1
+                        values[name]["Top 1000"] +=1
+    values[name]["Top 10"] = values[name]["Top 10"]*100/count
+    values[name]["Top 50"] = values[name]["Top 50"]*100/count
+    values[name]["Top 100"] = values[name]["Top 100"]*100/count
+    values[name]["Top 1000"] = values[name]["Top 1000"]*100/count
+    # Top 10[name] = Top 10[name]*100/count
+    # Top 50[name] = Top 50[name]*100/count
+    # Top 100[name] = Top 100[name]*100/count
+    # Top 1000[name] = Top 1000[name]*100/count
 
 accplot(values, names, "CUaccuracy")
-# print("10:", top10)
-# print("50:", top50)
-# print("100:", top100)
+# print("10:", Top 10)
+# print("50:", Top 50)
+# print("100:", Top 100)
 # print("1000:", top250)

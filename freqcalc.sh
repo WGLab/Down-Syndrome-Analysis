@@ -1,4 +1,5 @@
 DSDIR=/mnt/isilon/wang_lab/jim/Down-Syndrome-Clustering
+python notehash.py -p $DSDIR/controldata/hpo -d $DSDIR/../patientnotes.tsv -o $DSDIR/controlages.tsv
 python notehash.py -p $DSDIR/dsdata/hpo -d $DSDIR/../patientnotes.tsv -o $DSDIR/dsages.tsv
 python notehash.py -p $DSDIR/dsfilterdata/hpo -d $DSDIR/../patientnotes.tsv -o $DSDIR/dsfilterages.tsv
 python calc.py -d $DSDIR/controldata/hpo -o $DSDIR/control -a $DSDIR/controlages.tsv

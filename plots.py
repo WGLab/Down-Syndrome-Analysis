@@ -71,9 +71,12 @@ fp.columns=['de', 'he', 'dn', 'hn']
 fp=fp.fillna(0)
 import scipy.stats as ss
 import fisher
-print(fp.shape[0])
+bon=fp.shape[0]
+print(bon)
 # fp['fisher'] = fp.apply(lambda row : ss.fisher_exact([[row['de'], row['he']], [row['dn'], row['hn']]]), axis=1)
-fish = fp.apply(lambda row : fisher.pvalue(row['de'], row['he'], row['dn'], row['hn']).two_tail*fp.shape[0], axis=1) # fisher, and bonferroni correction
+fish = fp.apply(lambda row : fisher.pvalue(row['de'], row['he'], row['dn'], row['hn']).two_tail, axis=1) # fisher, and bonferroni correction
+# fish = fp.apply(lambda row : fisher.pvalue(row['de'], row['he'], row['dn'], row['hn']).two_tail*fp.shape[0], axis=1) # fisher, and bonferroni correction
+
 fish.columns=['fisher']
 
 
@@ -101,8 +104,12 @@ fish.columns=['fisher']
 
 # individual term age plots
 tsv=pd.concat([odds,fish], axis=1)
-tsv.columns=['OR', 'p-value']
-tsv.to_csv(args.output[0]+'.tsv', sep='\t')
+pvaluehead='p-value (FDR cutoff='+"{:.2e}".format(.05/bon)+')'
+tsv.columns=['OR', pvaluehead]
+tsv=tsv[tsv[pvaluehead]<.05/bon]
+tsv[pvaluehead]=tsv[pvaluehead].apply("{:.2e}".format)
+tsv.sort_values(by=['OR'],ascending=False,inplace=True)
+tsv.to_csv(args.output[0]+'.tsv', sep='\t',float_format='%.2f')
 # odds.to_csv(args.output[0]+'.tsv', sep='\t')
 fig, ax = plt.subplots()
 # fig, ax = plt.subplots(3,2)

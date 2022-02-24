@@ -14,7 +14,7 @@ So in order, the general workflow goes like this.
 
 `Baseline_cohort.ipynb`: This will help find the IDs to grab from the baseline cohort, which comes from random patients from 2012 with no heart problems, DS, or q22 deletion from the ASD-NER paper (unpublished).  This is used later to filter patients.
 
-`DS_Parsing.ipynb`: Query the gender, age, ethnicity data of the notes
+`DS_Parsing.ipynb`: Query the gender, age, ethnicity data of the notes.  You will need to manually extrapolate race and ethnicity as they come from multiple tables, values do not agree, and some don't exist from table to table.
 
 `pipeline.sh`: This is the script that tells you what to run to do basically everything to generate the NLP-derived HPO terms, filter notes, and generate tables, OR calcs, TF-IDF, PF, and all plots.
 

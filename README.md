@@ -8,9 +8,11 @@ Havrilla, J.M.; Zhao, M.; Liu, C.; Weng, C.; Helbig, I.; Bhoj, E.; Wang, K. Clin
 
 ## Description
 
-`Baseline_cohort.ipynb`: Grab the baseline cohort
+So in order, the general workflow goes like this.
 
-`Query_ICD_codes.ipynb`: Query the ICD code of the Down Syndrome Patients
+`DownSyndrome_pipeline.ipynb`: Mengge Zhao used some of the code in here to download all of the notes from Epic Clarity, and some of our initial filters and PCA/Clustering plots are in here as well.
+
+`Baseline_cohort.ipynb`: This will help find the IDs to grab from the baseline cohort, which comes from random patients from 2012 with no heart problems, DS, or q22 deletion from the ASD-NER paper (unpublished).  This is used later to filter patients.
 
 `DS_Parsing.ipynb`: Query the gender, age, ethnicity data of the notes
 

@@ -24,8 +24,21 @@ Inside of `pipeline.sh` we run:
 
 `filternotes.sh` to filters out those patients from the notes and removes low quality notes
 
-`runbaseline.sh` to generates all baseline notes, uses the `runnlp` folder, and runs `filterpatients.sh`
+`runbaseline.sh` to filter patients and only use relevant baseline notes, uses the `runnlp` folder, and runs `filterpatients.sh`
 
-`runbatches.sh` to generate all Down syndrome notes and uses the `runnlp` folder
+`runbatches.sh` to filter patients and only use relevant Down syndrome notes and uses the `runnlp` folder.
+
+`runnlp` folder contains:
+
+`hporepeat.py`
+`metamapparse.sh`
+`metarepeat.py`
+`metasubmit.sh`
+`pathwalk.py`
+`submit.sh`
+
+Which put together allow one to run all of the pre-processing of notes for MetaMap, run the MetaMap program on all notes, parse the MetaMap data, and run through the paths of the folders, and submit to cluster queues.
+
+Lastly, 
 
 `freqcalc.sh` is the script that we run to get frequencies and tf-idf calculations, OR and p-values, and plots; data not otherwise obtained in `DS_parsing.ipynb`
